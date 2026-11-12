@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 只需要联网做 DNS 转发，不需要任何读取联系人/短信/存储的权限。
+         ACCESS_NETWORK_STATE 用来读当前网络的 DNS 服务器（上游优先用它）。
+         FOREGROUND_SERVICE + POST_NOTIFICATIONS 用于通知栏常驻，避免被系统清理。 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:label="护链"
+        android:allowBackup="false"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="护链">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ApprovalsActivity"
+            android:exported="false"
+            android:label="网站白名单" />
+
+        <activity
+            android:name=".PinActivity"
+            android:exported="false"
+            android:label="密码" />
+
+        <!-- BIND_VPN_SERVICE 是系统用来绑定 VPN 服务的权限，必须声明。
+             foregroundServiceType=specialUse：DNS 过滤不属于其它任何标准类型，
+             且 specialUse 没有运行时长限制（dataSync 在 Android 15 上 6 小时会被强制停止）。 -->
+        <service
+            android:name=".GuardVpnService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="local_dns_filter" />
+        </service>
+
+        <receiver
+            android:name=".BootReceiver"
+            android:exported="false"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

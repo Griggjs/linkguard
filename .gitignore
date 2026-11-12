@@ -1,0 +1,32 @@
+# 运行时数据库（会记录家人访问过的域名，且可用 feeds --update 重建）
+**/data/*.db
+**/data/*.db-wal
+**/data/*.db-shm
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Android / Gradle
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.kotlin/
+.gradle/
+
+# 打包产物不进仓库 —— APK 请发到 GitHub Releases
+dist/*.apk
+*.keystore
+*.jks
+
+# 导出的名单
+*.hosts
+
+# IDE / 编辑器
+.idea/
+*.iml
+.vscode/
+.DS_Store

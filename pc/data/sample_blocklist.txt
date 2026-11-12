@@ -1,0 +1,32 @@
+# ============================================================
+# 名单格式示例 —— 这不是真实威胁情报，只是给你看格式、试流程用的
+# ============================================================
+#
+# 用法：
+#   python -m linkguard feeds --add-file data/sample_blocklist.txt
+#   然后 python -m linkguard check http://demo-phishing.example/x
+#   会看到 BLOCKLIST 命中并被拦下。
+#
+# 真实使用时，把你的名单替换成下面任意一种格式都可以（自动识别）：
+#
+#   1) 一行一个域名：
+#        evil-site.top
+#        www.evil-site.top
+#
+#   2) hosts 文件格式（可以带 IP，也可以只有域名）：
+#        0.0.0.0 evil-site.top
+#        127.0.0.1 tracker.example
+#
+#   3) Adblock 规则（||域名^）：
+#        ||evil-site.top^
+#        @@||good-site.com^     ← 以 @@ 开头的是白名单例外，会被跳过
+#
+#   4) URLhaus 的 CSV：直接把整行丢进来，会自动取 URL 里的域名
+#
+# 注释行以 # 或 ! 或 // 开头，不会被当成域名。
+
+demo-phishing.example
+fake-c2.example
+0.0.0.0 sample-tracker.example
+||sample-malware.example^
+@@||must-not-block.example^
